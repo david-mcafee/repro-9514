@@ -1,0 +1,22 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Pathway @model {
+  id: ID!
+  title: String!
+  description: String
+  thumbnail: String
+  pathwayPitstops: [PathwayPitstop] @hasMany(indexName: "byPathway", fields: ["id"])
+}
+
+type PathwayPitstop @model {
+  id: ID!
+  pathwayID: ID! @index(name: "byPathway")
+  pathway: Pathway @belongsTo(fields: ["pathwayID"])
+#   pitstopID: ID!
+#   pitstop: Pitstop @hasOne(fields: ["pitstopID"])
+  positionX: Int!
+  positionY: Int!
+  pathwayPitstopParentID: ID
+}
